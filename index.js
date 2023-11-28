@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const tenants = require('./routes/tenants');
+const jsong = require('./routes/jsong');
 const mongoose = require('mongoose');
 
 
@@ -14,6 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 
 
 app.use('/api/tenants', tenants);
+app.use('/api/jsong', jsong);
 
 app.get('/', (req, res) => {
   res.send('GET request to the homepage')
