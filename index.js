@@ -4,6 +4,8 @@ const tenants = require('./routes/tenants');
 const jsong = require('./routes/jsong');
 const coswalk = require('./routes/coswalk');
 const mongoose = require('mongoose');
+const dotenv = require('dotenv').config().parsed;
+
 
 
 const app = express();
@@ -24,12 +26,13 @@ app.get('/', (req, res) => {
 })
 
 // Start the server
-app.listen(port, async ()  => {
+app.listen(dotenv.PORT, async ()  => {
   try {
-    await mongoose.connect('mongodb://127.0.0.1:27017/db_bunkasai_istts')
+    await mongoose.connect(`mongodb+srv://${dotenv.USERNAME}:${dotenv.PASSWORD}@cluster0.klxoze2.mongodb.net/${dotenv.DB_NAME}`)
     console.log('hehehhehee');
   } catch (error) {
     console.log(error);
   }
-  console.log(`Server is running on port ${port}`);
+  console.log(`Server is running on port ${dotenv.PORT}`);
+  console.log(dotenv);
 });
