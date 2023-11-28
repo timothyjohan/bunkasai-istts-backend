@@ -34,5 +34,4 @@ app.listen(dotenv.PORT, async ()  => {
     console.log(error);
   }
   console.log(`Server is running on port ${dotenv.PORT}`);
-  console.log(dotenv);
 });
