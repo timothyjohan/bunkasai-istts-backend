@@ -1,10 +1,7 @@
 const { default: mongoose } = require("mongoose");
 
 const TenantSchema = new mongoose.Schema({
-    id:{
-        type: Number,
-        required:true
-    },
+
     nama_tenant:{
         type: String,
         required:true
@@ -18,7 +15,7 @@ const TenantSchema = new mongoose.Schema({
         required:true
     },
     alamat:{
-        type: Array,
+        type: String,
         required:true
     },
     status:{
