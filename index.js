@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
-const users = require('./routes/users');
+const tenants = require('./routes/tenants');
+const mongoose = require('mongoose');
+
 
 const app = express();
 const port = 3666;
@@ -11,13 +13,19 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
-app.use('/api', users);
+app.use('/api/tenants', tenants);
 
 app.get('/', (req, res) => {
   res.send('GET request to the homepage')
 })
 
 // Start the server
-app.listen(port, () => {
+app.listen(port, async ()  => {
+  try {
+    await mongoose.connect('mongodb://127.0.0.1:27017/db_bunkasai_istts')
+    console.log('hehehhehee');
+  } catch (error) {
+    console.log(error);
+  }
   console.log(`Server is running on port ${port}`);
 });
