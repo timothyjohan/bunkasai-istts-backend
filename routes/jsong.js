@@ -24,9 +24,12 @@ router.post('/new', upload.single('bukti'), async (req, res) => {
       `https://api.imgur.com/3/image?client_id=${process.env.IMGUR_CLIENT_ID}`,
       {
         image: bukti,
+      },
+      {
         headers: {
           Authorization: `Bearer ${process.env.IMGUR_TOKEN}`,
         },
+
       }
       )
 
