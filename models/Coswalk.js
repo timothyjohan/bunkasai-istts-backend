@@ -14,6 +14,10 @@ const CoswalkSchema = new mongoose.Schema({
         type: String,
         required:true
     },
+    img:{
+        type: String,
+        required:true
+    },
     status:{
         type: Boolean,
         required:true

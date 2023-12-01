@@ -16,9 +16,6 @@ const upload = multer({storage})
 router.post('/new', upload.single('bukti'), async (req, res) => {
   const {nama_peserta, telp, nama_panggung, lagu, link} = req.body
   const bukti = fs.readFileSync(req.file.path, { encoding: 'base64' });
-  if (!bukti) {
-    return res.status(400).send('No file uploaded.');
-  }
   try {
     const imgurResponse = await axios.post(
       `https://api.imgur.com/3/image?client_id=${process.env.IMGUR_CLIENT_ID}`,
