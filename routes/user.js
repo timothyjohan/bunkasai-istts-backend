@@ -17,7 +17,7 @@ router.post("/", async (req, res) => {
                         password: user.password,
                     },
                     JWT_KEY,
-                    { expiresIn: "10s" }
+                    { expiresIn: "1h" }
                 );
                 user.updateOne({ api_key: token });
 
@@ -40,7 +40,6 @@ router.post("/", async (req, res) => {
 
 router.get("/", async (req, res) => {
     const { user } = req.body;
-    console.log(user);
     let token = req.header("x-auth-token");
     if (!req.header("x-auth-token")) {
         return res.status(400).send("Authentication token is missing");
