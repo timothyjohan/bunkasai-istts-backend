@@ -33,6 +33,11 @@ router.get('/', async (req, res) => {
     return res.status(500).send(error)
   }
 })
+router.put('/:id', async (req, res) => {
+  const {id} = req.params
+  const update = await Tenant.updateOne({na})
+  res.send(id)
+})
 
 
 module.exports = router

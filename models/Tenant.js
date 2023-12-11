@@ -2,6 +2,12 @@ const { default: mongoose } = require("mongoose");
 
 const TenantSchema = new mongoose.Schema({
 
+    _id: {
+        type: mongoose.Schema.Types.ObjectId,
+        index: true,
+        required: true,
+        auto: true,
+    },
     nama_tenant:{
         type: String,
         required:true
