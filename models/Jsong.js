@@ -2,12 +2,7 @@ const { default: mongoose } = require("mongoose");
 
 const JsongSchema = new mongoose.Schema({
 
-    _id: {
-        type: mongoose.Schema.Types.ObjectId,
-        index: true,
-        required: true,
-        auto: true,
-    },
+    
     nama_peserta:{
         type: String,
         required:true
