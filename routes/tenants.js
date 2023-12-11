@@ -33,10 +33,14 @@ router.get('/', async (req, res) => {
     return res.status(500).send(error)
   }
 })
-router.put('/:id', async (req, res) => {
-  const {id} = req.params
-  const update = await Tenant.updateOne({na})
-  res.send(id)
+//Change status to kebalikannya
+router.put('/:tel', async (req, res) => {
+  const { tel } = req.params
+  const get = await Tenant.findOne({ telp: tel })
+
+  const update = await Tenant.updateOne({ telp: tel }, { status: !get.status })
+  res.send(update)
+
 })
 
 
