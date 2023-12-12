@@ -50,4 +50,14 @@ router.post('/new', upload.single('bukti'), async (req, res) => {
 
 })
 
+
+router.get('/', async (req, res) => {
+  try {
+    const jsongs = await Jsong.find()
+    return res.status(200).send(jsongs)
+  } catch (error) {
+    return res.status(500).send(error)
+  }
+})
+
 module.exports = router
