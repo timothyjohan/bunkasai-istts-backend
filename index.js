@@ -41,7 +41,7 @@ app.get("/", (req, res) => {
 
 // Menjalankan Server: Server mulai mendengarkan port yang
 // ditentukan dalam file konfigurasi .env. Koneksi ke database MongoDB juga dibuat.
-app.listen(dotenv.PORT, async () => {
+app.listen(process.env.PORT, async () => {
     try {
         await mongoose.connect(
             `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.klxoze2.mongodb.net/${process.env.DB_NAME}`
