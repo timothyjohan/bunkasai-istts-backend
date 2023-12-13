@@ -47,7 +47,30 @@ router.post('/new', upload.single('bukti'), async (req, res) => {
   } catch (error) {
     return res.status(500).send(error)
   }
+})
+router.get('/', async (req, res) => {
+  try {
+    const coswalk = await Coswalk.find()
+    return res.status(200).send(coswalk)
+  } catch (error) {
+    return res.status(500).send(error)
+  }
+})
+router.get('/:instagram', async (req, res) => {
+  const {instagram} = req.params
+  try {
+    const coswalks = await Coswalk.findOne( {instagram: instagram} )
+    return res.status(200).send(coswalks)
+  } catch (error) {
+    return res.status(500).send(error)
+  }
+})
 
+router.put('/:instagram', async (req, res) => {
+  const { instagram } = req.params
+  const get = await Coswalk.findOne({ instagram: instagram })
+  const update = await Coswalk.updateOne({ instagram: instagram }, { status: !get.status })
+  res.send(update)
 })
 
 

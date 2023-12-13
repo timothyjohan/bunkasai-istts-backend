@@ -60,4 +60,21 @@ router.get('/', async (req, res) => {
   }
 })
 
+router.get('/:telp', async (req, res) => {
+  const {telp} = req.params
+  try {
+    const jsongs = await Jsong.findOne( {telp: telp} )
+    return res.status(200).send(jsongs)
+  } catch (error) {
+    return res.status(500).send(error)
+  }
+})
+
+router.put('/:telp', async (req, res) => {
+  const { telp } = req.params
+  const get = await Jsong.findOne({ telp: telp })
+  const update = await Jsong.updateOne({ telp: telp }, { status: !get.status })
+  res.send(update)
+})
+
 module.exports = router
