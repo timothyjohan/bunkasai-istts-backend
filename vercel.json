@@ -1,15 +1,18 @@
 {
-    "version":2,
+    "version": 2,
     "builds": [
         {
             "src": "./index.js",
             "use": "@vercel/node"
         }
     ],
-    "routes":[
-        {
-            "src": "/(.*)",
-            "dest": "/"
-        }
+    "routes": [
+        { "src": "/api/tenants", "dest": "/api/tenants" },
+        { "src": "/api/jsong", "dest": "/api/jsong" },
+        { "src": "/api/coswalk", "dest": "/api/coswalk" },
+        { "src": "/api/user", "dest": "/api/user" },
+        { "src": "/api/gallery", "dest": "/api/gallery" },
+        { "src": "/api/feedback", "dest": "/api/feedback" },
+        { "src": "/(.*)", "dest": "/" }
     ]
 }
