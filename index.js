@@ -7,7 +7,7 @@ const user = require("./routes/user");
 const gallery = require("./routes/gallery");
 const feedback = require("./routes/feedback");
 const mongoose = require("mongoose");
-const dotenv = require("dotenv").config().parsed;
+const dotenv = require("dotenv").config()
 
 const app = express();
 const port = 3666;
@@ -28,14 +28,14 @@ app.get("/", (req, res) => {
 });
 
 // Start the server
-app.listen(dotenv.PORT, async () => {
+app.listen(process.env.PORT, async () => {
     try {
         await mongoose.connect(
-            `mongodb+srv://${dotenv.USERNAME}:${dotenv.PASSWORD}@cluster0.klxoze2.mongodb.net/${dotenv.DB_NAME}`
+            `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.klxoze2.mongodb.net/${process.env.DB_NAME}`
         );
         console.log("hehehhehee");
     } catch (error) {
         console.log(error);
     }
-    console.log(`Server is running on port ${dotenv.PORT}`);
+    console.log(`Server is running on port ${process.env.PORT}`);
 });
