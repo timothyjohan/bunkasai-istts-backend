@@ -7,8 +7,8 @@
         }
     ],
     "routes": [
-        { "src": "/api/tenants", "dest": "/api/tenants" },
-        { "src": "/api/jsong", "dest": "/api/jsong" },
+        { "src": "/api/tenants", "dest": "./routes/tenants" },
+        { "src": "/api/jsong", "dest": "./routes/jsong.js" },
         { "src": "/api/coswalk", "dest": "/api/coswalk" },
         { "src": "/api/user", "dest": "/api/user" },
         { "src": "/api/gallery", "dest": "/api/gallery" },
