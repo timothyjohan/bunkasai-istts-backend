@@ -48,6 +48,27 @@ router.get('/', async (req, res) => {
   const request = await Gallery.find()
   return res.status(200).send(request)
 })
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params
+  const url = `https://i.imgur.com/${id}.png`
+
+  try {
+    await Gallery.deleteOne({img:url})
+    await axios.delete(`https://api.imgur.com/3/image/${id}?client_id=${process.env.IMGUR_CLIENT_ID}`,
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.IMGUR_TOKEN}`,
+      },
+      
+    }
+    )
+    return res.status(201).send(`Image berhasil dihapus`)
+
+  } catch (error) {
+    return res.status(500).send(error)
+    
+  }
+})
 
 
 module.exports = router
