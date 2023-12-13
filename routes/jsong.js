@@ -159,4 +159,8 @@ router.put("/:telp", async (req, res) => {
     res.send(update);
 });
 
+router.get('/cek', (req, res) => {
+  res.send('GET request to the jsong')
+})
+
 module.exports = router;
