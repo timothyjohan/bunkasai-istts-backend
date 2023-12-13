@@ -1,36 +1,51 @@
+// Overview
+// Schema (Model) JSongs digunakan untuk menyimpan informasi terkait
+// partisipasi peserta dalam suatu acara yang berkaitan dengan
+// penampilan musik atau bernyanyi. Setiap dokumen dalam koleksi
+// ini mencakup informasi seperti nama peserta, nomor telepon,
+// nama panggung, judul lagu, tautan lagu, path file atau URL gambar peserta,
+// dan status partisipasi.
+
 const { default: mongoose } = require("mongoose");
 
 const JsongSchema = new mongoose.Schema({
-
-    
-    nama_peserta:{
+    nama_peserta: {
         type: String,
-        required:true
+        required: true,
     },
-    telp:{
+    telp: {
         type: String,
-        required:true
+        required: true,
     },
-    nama_panggung:{
+    nama_panggung: {
         type: String,
-        required:true
+        required: true,
     },
-    lagu:{
+    lagu: {
         type: String,
-        required:true
+        required: true,
     },
-    link:{
+    link: {
         type: String,
-        required:true
+        required: true,
     },
-    img:{
+    img: {
         type: String,
-        required:true
+        required: true,
     },
-    status:{
+    status: {
         type: Boolean,
-        required:true
+        required: true,
     },
-})
+});
 
-module.exports = mongoose.model('jsongs', JsongSchema)
+// Validasi Data
+// Schema ini menggunakan required: true pada setiap field,
+// memastikan bahwa semua informasi yang dibutuhkan untuk melibatkan
+// peserta dalam acara musik disediakan.
+
+module.exports = mongoose.model("jsongs", JsongSchema);
+
+// Schema ini diekspor sebagai model Mongoose dengan nama 'jsongs'.
+// Model ini dapat digunakan di bagian lain dari aplikasi untuk
+// berinteraksi dengan koleksi 'jsongs' dalam basis data MongoDB.
