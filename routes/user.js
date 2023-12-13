@@ -28,13 +28,13 @@ router.post("/", async (req, res) => {
                     },
                 });
             } else {
-                return res.status(400).send({ message: "Incorrect Password" });
+                return res.status(400).send({ message: "Password salah!" });
             }
         } else {
-            return res.status(404).send({ message: "User not found" });
+            return res.status(404).send({ message: "User Bukan Admin!" });
         }
     } else {
-        return res.status(400).send({ message: "Every field must be filled" });
+        return res.status(400).send({ message: "Semua field wajib diisi!" });
     }
 });
 
