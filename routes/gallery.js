@@ -44,5 +44,10 @@ router.post('/new', upload.single('photo'), async (req, res) => {
 
 })
 
+router.get('/', async (req, res) => {
+  const request = await Gallery.find()
+  return res.status(200).send(request)
+})
+
 
 module.exports = router
