@@ -3,9 +3,10 @@ const cors = require("cors");
 const tenants = require("./routes/tenants");
 const jsong = require("./routes/jsong");
 const coswalk = require("./routes/coswalk");
+const user = require("./routes/user");
+const gallery = require("./routes/gallery");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv").config().parsed;
-const user = require("./routes/user");
 
 const app = express();
 const port = 3666;
@@ -18,6 +19,7 @@ app.use("/api/tenants", tenants);
 app.use("/api/jsong", jsong);
 app.use("/api/coswalk", coswalk);
 app.use("/api/user", user);
+app.use("/api/gallery", gallery);
 
 app.get("/", (req, res) => {
     res.send("GET request to the homepage");
