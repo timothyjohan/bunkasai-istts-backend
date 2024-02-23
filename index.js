@@ -12,6 +12,7 @@ const coswalk = require("./routes/coswalk");
 const user = require("./routes/user");
 const gallery = require("./routes/gallery");
 const feedback = require("./routes/feedback");
+const payment = require("./routes/payment");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv").config();
 
@@ -33,6 +34,7 @@ app.use("/api/coswalk", coswalk);
 app.use("/api/user", user);
 app.use("/api/gallery", gallery);
 app.use("/api/feedback", feedback);
+app.use("/api/payment", payment);
 
 // Rute Default: Rute default ("/") mengirimkan pesan sederhana.
 app.get("/", (req, res) => {

@@ -49,30 +49,26 @@ const upload = multer({ storage });
 //  5. Membuat kontestan baru di database dengan objek newJsong.
 //  6. Mengirimkan response dengan status 201 dan objek newJsong.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
-router.post("/new", upload.single("bukti"), async (req, res) => {
+router.post("/new", async (req, res) => {
     const { nama_peserta, telp, nama_panggung, lagu, link } = req.body;
-    const bukti = fs.readFileSync(req.file.path, { encoding: "base64" });
     try {
-        const imgurResponse = await axios.post(
-            `https://api.imgur.com/3/image?client_id=${process.env.IMGUR_CLIENT_ID}`,
-            {
-                image: bukti,
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${process.env.IMGUR_TOKEN}`,
-                },
-            }
-        );
-
-        let tempImg = imgurResponse.data.data.link;
+        // const imgurResponse = await axios.post(
+        //     `https://api.imgur.com/3/image?client_id=${process.env.IMGUR_CLIENT_ID}`,
+        //     {
+        //         image: bukti,
+        //     },
+        //     {
+        //         headers: {
+        //             Authorization: `Bearer ${process.env.IMGUR_TOKEN}`,
+        //         },
+        //     }
+        // );
         const newJsong = {
             nama_peserta: nama_peserta,
             telp: telp,
             nama_panggung: nama_panggung,
             lagu: lagu,
             link: link,
-            img: tempImg,
             status: false,
         };
         await Jsong.create(newJsong);
