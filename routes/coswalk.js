@@ -45,29 +45,15 @@ const upload = multer({ storage });
 //  6. Mengirimkan response dengan status 201 dan objek newCoswalk.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
 
-router.post("/new", upload.single("bukti"), async (req, res) => {
+router.post("/new",  async (req, res) => {
     const { nama_peserta, nama_panggung, instagram } = req.body;
-    const bukti = fs.readFileSync(req.file.path, { encoding: "base64" });
 
     try {
-        const imgurResponse = await axios.post(
-            `https://api.imgur.com/3/image?client_id=${process.env.IMGUR_CLIENT_ID}`,
-            {
-                image: bukti,
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${process.env.IMGUR_TOKEN}`,
-                },
-            }
-        );
-        let tempImg = imgurResponse.data.data.link;
 
         const newCoswalk = {
             nama_peserta: nama_peserta,
             nama_panggung: nama_panggung,
             instagram: instagram,
-            img: tempImg,
             status: false,
         };
 
