@@ -114,7 +114,7 @@ router.get("/", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
     const { id } = req.params;
-    const url = `https://i.imgur.com/${id}.png`;
+    const url = `https://i.imgur.com/${id}.png`; //todo
 
     try {
         await Gallery.deleteOne({ img: url });
