@@ -46,10 +46,10 @@ app.get("/", (req, res) => {
 app.get("/qr", async (req, res) => {
   const qrData = await QrService.generateQR("halo ko timot");
   
-  return res
-    .status(200)
-    .send({ transactionToken: "transactionToken", qr: qrData });
-//   res.send(`<img src="${qrData}" alt=""></img>`);
+//   return res
+//     .status(200)
+//     .send({ transactionToken: "transactionToken", qr: qrData });
+  res.send(`<img src="${qrData}" alt=""></img>`);
 });
 
 // Menjalankan Server: Server mulai mendengarkan port yang
