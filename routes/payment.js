@@ -1,5 +1,6 @@
 const express = require("express");
 const XenditService = require("../services/xenditservice");
+const TransactionService = require("../services/transactionservice");
 const router = express.Router();
 
 // This Use Midtrans
@@ -88,8 +89,15 @@ router.get("/", async (req, res) => {
     console.log("Created Invoice:", invoice);
 
     // Return the invoice URL as the transaction token
-    const transactionToken = invoice.invoice_url;
+    // const transactionToken = invoice.invoice_url;
+
+    // console.log("transactionToken:", transactionToken);
+    const transactionToken = TransactionService.generateInvoiceId();
     console.log("transactionToken:", transactionToken);
+
+    const htransName = ""; // 2 kemungkinan dari xendit ato req.query
+    TransactionService.generateHtransTicket(invoice.id, htransName);
+
     return res.status(200).send({ transactionToken: transactionToken });
   } catch (error) {
     console.error("Error in Xendit service usage example:", error);
