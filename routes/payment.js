@@ -1,6 +1,7 @@
 const express = require("express");
 const XenditService = require("../services/xenditservice");
 const TransactionService = require("../services/transactionservice");
+const QrService = require("../services/qrservice");
 const router = express.Router();
 
 // This Use Midtrans
@@ -95,10 +96,14 @@ router.get("/", async (req, res) => {
     const transactionToken = TransactionService.generateInvoiceId();
     console.log("transactionToken:", transactionToken);
 
-    const htransName = ""; // 2 kemungkinan dari xendit ato req.query
-    TransactionService.generateHtransTicket(invoice.id, htransName);
+    const htransName = ""; // NOTE : 2 kemungkinan dari xendit ato req.query
+    TransactionService.generateHtransTicket(transactionToken, htransName);
 
-    return res.status(200).send({ transactionToken: transactionToken });
+    const qrData = await QrService.generateQR(transactionToken);
+
+    return res
+      .status(200)
+      .send({ transactionToken: transactionToken, qr: qrData });
   } catch (error) {
     console.error("Error in Xendit service usage example:", error);
     return res.status(500).send({ error: "Internal Server Error" });

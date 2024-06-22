@@ -14,6 +14,7 @@ const gallery = require("./routes/gallery");
 const feedback = require("./routes/feedback");
 const payment = require("./routes/payment");
 const mongoose = require("mongoose");
+const QrService = require("./services/qrservice");
 const dotenv = require("dotenv").config();
 
 // Inisialisasi Aplikasi Express: Aplikasi Express dibuat dan port ditetapkan.
@@ -38,19 +39,29 @@ app.use("/api/payment", payment);
 
 // Rute Default: Rute default ("/") mengirimkan pesan sederhana.
 app.get("/", (req, res) => {
-    res.send("GET request to the homepage");
+  res.send("GET request to the homepage");
+});
+
+// NOTE : test qr nya jalan ato gk
+app.get("/qr", async (req, res) => {
+  const qrData = await QrService.generateQR("halo ko timot");
+  
+  return res
+    .status(200)
+    .send({ transactionToken: "transactionToken", qr: qrData });
+//   res.send(`<img src="${qrData}" alt=""></img>`);
 });
 
 // Menjalankan Server: Server mulai mendengarkan port yang
 // ditentukan dalam file konfigurasi .env. Koneksi ke database MongoDB juga dibuat.
 app.listen(process.env.PORT, async () => {
-    try {
-        await mongoose.connect(
-            `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.klxoze2.mongodb.net/${process.env.DB_NAME}`
-        );
-        console.log("hehehhehee");
-    } catch (error) {
-        console.log(error);
-    }
-    console.log(`Server is running on port ${process.env.PORT}`);
+  try {
+    await mongoose.connect(
+      `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.klxoze2.mongodb.net/${process.env.DB_NAME}`
+    );
+    console.log("hehehhehee");
+  } catch (error) {
+    console.log(error);
+  }
+  console.log(`Server is running on port ${process.env.PORT}`);
 });
