@@ -10,7 +10,8 @@ const express = require("express");
 const router = express.Router();
 const { 
     loginUser,
-    getAllUsers 
+    getAllUsers,
+    registerUser 
 } = require("../controllers/userController");
 
 // Endpoint
@@ -38,6 +39,24 @@ const {
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
 
 router.post("/", loginUser);
+
+// Endpoint
+//  POST /register
+//    Menerima username dan password dalam req.body. Jika username
+//    dan password ada, maka mencoba mencari pengguna dengan username yang
+//    diberikan. Jika pengguna ditemukan, mengirim respons dengan status 400 dan pesan "Username sudah digunakan!".
+//    Jika pengguna tidak ditemukan, membuat pengguna baru di database dan mengirim respons dengan status 201 dan objek pengguna yang baru dibuat.
+//    Jika username atau password tidak ada, mengirim respons dengan status 400 dan pesan "Semua field wajib diisi!".
+// Request:
+//  Body:
+//    username: Username pengguna
+//    password: Password pengguna
+// Response:
+//  Status 201: Pengguna berhasil ditambahkan. Mengembalikan objek pengguna yang baru dibuat.
+//  Status 400: Username sudah digunakan atau field tidak lengkap.
+//  Status 500: Terjadi kesalahan server. Mengembalikan pesan error.
+
+router.post("/register", registerUser);
 
 // Endpoint
 //  GET /
