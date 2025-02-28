@@ -1,14 +1,27 @@
 const Jsong = require("../models/Jsong");
 
 const createJsong = async (req, res) => {
-    const { title, description, content } = req.body;
-
-    const newJsong = {
-        title: title,
-        description: description,
-        content: content,
-    };
+    const { nama_peserta, telp, nama_panggung, lagu, link } = req.body;
     try {
+        // const imgurResponse = await axios.post(
+        //     `https://api.imgur.com/3/image?client_id=${process.env.IMGUR_CLIENT_ID}`,
+        //     {
+        //         image: bukti,
+        //     },
+        //     {
+        //         headers: {
+        //             Authorization: `Bearer ${process.env.IMGUR_TOKEN}`,
+        //         },
+        //     }
+        // );
+        const newJsong = {
+            nama_peserta: nama_peserta,
+            telp: telp,
+            nama_panggung: nama_panggung,
+            lagu: lagu,
+            link: link,
+            status: false,
+        };
         await Jsong.create(newJsong);
         return res.status(201).send(newJsong);
     } catch (error) {
@@ -28,8 +41,8 @@ const getAllJsongs = async (req, res) => {
 const getJsongByTelp = async (req, res) => {
     const { telp } = req.params;
     try {
-        const jsong = await Jsong.findOne({ telp: telp });
-        return res.status(200).send(jsong);
+        const jsongs = await Jsong.findOne({ telp: telp });
+        return res.status(200).send(jsongs);
     } catch (error) {
         return res.status(500).send(error);
     }
@@ -37,16 +50,12 @@ const getJsongByTelp = async (req, res) => {
 
 const updateJsongStatus = async (req, res) => {
     const { telp } = req.params;
-    try {
-        const get = await Jsong.findOne({ telp: telp });
-        const update = await Jsong.updateOne(
-            { telp: telp },
-            { status: !get.status }
-        );
-        return res.status(200).send(update);
-    } catch (error) {
-        return res.status(500).send(error);
-    }
+    const get = await Jsong.findOne({ telp: telp });
+    const update = await Jsong.updateOne(
+        { telp: telp },
+        { status: !get.status }
+    );
+    res.send(update);
 };
 
 const checkJsong = (req, res) => {

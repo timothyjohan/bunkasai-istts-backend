@@ -12,10 +12,11 @@ const createTenant = async (req, res) => {
     };
     try {
         await Tenant.create(newTenant);
-        return res.status(201).send(newTenant);
     } catch (error) {
         return res.status(500).send(error);
     }
+
+    return res.status(201).send(newTenant);
 };
 
 const getAllTenants = async (req, res) => {
@@ -29,16 +30,13 @@ const getAllTenants = async (req, res) => {
 
 const updateTenantStatus = async (req, res) => {
     const { tel } = req.params;
-    try {
-        const get = await Tenant.findOne({ telp: tel });
-        const update = await Tenant.updateOne(
-            { telp: tel },
-            { status: !get.status }
-        );
-        return res.status(200).send(update);
-    } catch (error) {
-        return res.status(500).send(error);
-    }
+    const get = await Tenant.findOne({ telp: tel });
+
+    const update = await Tenant.updateOne(
+        { telp: tel },
+        { status: !get.status }
+    );
+    res.send(update);
 };
 
 module.exports = {

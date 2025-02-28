@@ -3,33 +3,42 @@ const axios = require("axios");
 const dotenv = require("dotenv").config().parsed;
 
 const createGallery = async (req, res) => {
-    const { title, description, imageUrl } = req.body;
+    const photo = fs.readFileSync(req.file.path, { encoding: "base64" });
 
-    const newGallery = {
-        title: title,
-        description: description,
-        imageUrl: imageUrl,
-    };
     try {
-        await Gallery.create(newGallery);
-        return res.status(201).send(newGallery);
+        const imgurResponse = await axios.post(
+            `https://api.imgur.com/3/image?client_id=${process.env.IMGUR_CLIENT_ID}`,
+            {
+                image: photo,
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${process.env.IMGUR_TOKEN}`,
+                },
+            }
+        );
+        let tempImg = imgurResponse.data.data.link;
+
+        const newphoto = {
+            img: tempImg,
+        };
+
+        await Gallery.create(newphoto);
+
+        return res.status(201).send(newphoto);
     } catch (error) {
-        return res.status(500).send(error);
+        return res.status(500).send(error.message);
     }
 };
 
 const getAllGalleries = async (req, res) => {
-    try {
-        const galleries = await Gallery.find();
-        return res.status(200).send(galleries);
-    } catch (error) {
-        return res.status(500).send(error);
-    }
+    const request = await Gallery.find();
+    return res.status(200).send(request);
 };
 
 const deleteGallery = async (req, res) => {
     const { id } = req.params;
-    const url = `https://i.imgur.com/${id}.png`;
+    const url = `https://i.imgur.com/${id}.png`; //todo
 
     try {
         await Gallery.deleteOne({ img: url });
