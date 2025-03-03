@@ -1,4 +1,4 @@
-// File tenants.js ini adalah modul router Express.js yang
+// File tenantsRoutes.js ini adalah modul router Express.js yang
 // menangani operasi CRUD (Create, Read, Update, Delete) untuk model Tenant.
 
 // Dependencies :
@@ -6,7 +6,11 @@
 //  ../models/Tenant: Model Mongoose untuk koleksi Tenant dalam database MongoDB
 const express = require("express");
 const router = express.Router();
-const Tenant = require("../models/Tenant");
+const {
+    createTenant,
+    getAllTenants,
+    updateTenantStatus,
+} = require("../controllers/tenantsController");
 
 // Endpoint
 //  POST /new
@@ -29,24 +33,7 @@ const Tenant = require("../models/Tenant");
 //  4. Mengirimkan response dengan status 201 dan objek newTenant.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
 
-router.post("/new", async (req, res) => {
-    const { nama_tenant, nama_cp, telp, alamat } = req.body;
-
-    const newTenant = {
-        nama_tenant: nama_tenant,
-        nama_cp: nama_cp,
-        telp: telp,
-        alamat: alamat,
-        status: false,
-    };
-    try {
-        await Tenant.create(newTenant);
-    } catch (error) {
-        return res.status(500).send(error);
-    }
-
-    return res.status(201).send(newTenant);
-});
+router.post("/new", createTenant);
 
 // Endpoint
 //  GET /
@@ -60,17 +47,10 @@ router.post("/new", async (req, res) => {
 //  2. Mengirimkan response dengan status 200 dan array yang berisi semua tenant yang ada.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
 
-router.get("/", async (req, res) => {
-    try {
-        const tenants = await Tenant.find();
-        return res.status(200).send(tenants);
-    } catch (error) {
-        return res.status(500).send(error);
-    }
-});
+router.get("/", getAllTenants);
 
 // Endpoint
-//  PUT /:telp
+//  PUT /:tel
 //    Mengubah status tenant.
 
 // Request:
@@ -87,15 +67,6 @@ router.get("/", async (req, res) => {
 //  4. Mengirimkan response dengan status 200 dan objek tenant.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
 
-router.put("/:tel", async (req, res) => {
-    const { tel } = req.params;
-    const get = await Tenant.findOne({ telp: tel });
-
-    const update = await Tenant.updateOne(
-        { telp: tel },
-        { status: !get.status }
-    );
-    res.send(update);
-});
+router.put("/:tel", updateTenantStatus);
 
 module.exports = router;

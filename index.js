@@ -6,13 +6,13 @@
 // Modul ini termasuk express, cors, mongoose, dan dotenv, serta beberapa modul rute khusus.
 const express = require("express");
 const cors = require("cors");
-const tenants = require("./routes/tenants");
-const jsong = require("./routes/jsong");
-const coswalk = require("./routes/coswalk");
-const user = require("./routes/user");
-const gallery = require("./routes/gallery");
-const feedback = require("./routes/feedback");
-const payment = require("./routes/payment");
+const tenants = require("./src/routes/tenantsRoutes");
+const jsong = require("./src/routes/jsongRoutes");
+const coswalk = require("./src/routes/coswalkRoutes");
+const user = require("./src/routes/userRoutes");
+const gallery = require("./src/routes/galleryRoutes");
+const feedback = require("./src/routes/feedbackRoutes");
+const payment = require("./src/routes/paymentRoutes");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv").config();
 

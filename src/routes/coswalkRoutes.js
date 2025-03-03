@@ -10,7 +10,6 @@
 
 const express = require("express");
 const router = express.Router();
-const Coswalk = require("../models/Coswalk");
 const multer = require("multer");
 const { default: axios } = require("axios");
 const dotenv = require("dotenv").config().parsed;
@@ -19,6 +18,13 @@ const fs = require("fs");
 const storage = multer.diskStorage({});
 
 const upload = multer({ storage });
+
+const {
+    createCoswalk,
+    getAllCoswalks,
+    getCoswalkByInstagram,
+    updateCoswalkStatus,
+} = require("../controllers/coswalkController");
 
 // Endpoint
 //  POST /new
@@ -45,25 +51,7 @@ const upload = multer({ storage });
 //  6. Mengirimkan response dengan status 201 dan objek newCoswalk.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
 
-router.post("/new",  async (req, res) => {
-    const { nama_peserta, nama_panggung, instagram } = req.body;
-
-    try {
-
-        const newCoswalk = {
-            nama_peserta: nama_peserta,
-            nama_panggung: nama_panggung,
-            instagram: instagram,
-            status: false,
-        };
-
-        await Coswalk.create(newCoswalk);
-
-        return res.status(201).send(newCoswalk);
-    } catch (error) {
-        return res.status(500).send(error);
-    }
-});
+router.post("/new", createCoswalk);
 
 // Endpoint
 //  GET /
@@ -81,14 +69,7 @@ router.post("/new",  async (req, res) => {
 //  2. Mengirimkan response dengan status 200 dan array yang berisi semua peserta.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
 
-router.get("/", async (req, res) => {
-    try {
-        const coswalk = await Coswalk.find();
-        return res.status(200).send(coswalk);
-    } catch (error) {
-        return res.status(500).send(error);
-    }
-});
+router.get("/", getAllCoswalks);
 
 // Endpoint
 //  GET /:instagram
@@ -107,15 +88,7 @@ router.get("/", async (req, res) => {
 //  2. Mengirimkan response dengan status 200 dan objek peserta.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
 
-router.get("/:instagram", async (req, res) => {
-    const { instagram } = req.params;
-    try {
-        const coswalks = await Coswalk.findOne({ instagram: instagram });
-        return res.status(200).send(coswalks);
-    } catch (error) {
-        return res.status(500).send(error);
-    }
-});
+router.get("/:instagram", getCoswalkByInstagram);
 
 // Endpoint
 //  DELETE /:instagram
@@ -135,14 +108,6 @@ router.get("/:instagram", async (req, res) => {
 //  3. Mengirimkan response dengan status 200 dan objek peserta.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
 
-router.put("/:instagram", async (req, res) => {
-    const { instagram } = req.params;
-    const get = await Coswalk.findOne({ instagram: instagram });
-    const update = await Coswalk.updateOne(
-        { instagram: instagram },
-        { status: !get.status }
-    );
-    res.send(update);
-});
+router.put("/:instagram", updateCoswalkStatus);
 
 module.exports = router;

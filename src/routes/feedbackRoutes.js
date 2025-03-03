@@ -7,8 +7,11 @@
 //  ../models/Feedback: Model Mongoose untuk koleksi Feedback dalam database MongoDB
 
 const express = require("express");
-const Feedback = require("../models/Feedback");
 const router = express.Router();
+const {
+    createFeedback,
+    getAllFeedbacks,
+} = require("../controllers/feedbackController");
 
 // Endpoint
 //  POST /new
@@ -31,22 +34,7 @@ const router = express.Router();
 //  4. Mengirimkan response dengan status 201 dan objek newFeedback.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
 
-router.post("/new", async (req, res) => {
-    const { kritik, saran, pesan, kesan } = req.body;
-    const newFeedback = {
-        kritik: kritik,
-        saran: saran,
-        pesan: pesan,
-        kesan: kesan,
-    };
-    try {
-        await Feedback.create(newFeedback);
-    } catch (error) {
-        return res.status(500).send(error);
-    }
-
-    return res.status(201).send(newFeedback);
-});
+router.post("/new", createFeedback);
 
 // Endpoint
 //  GET /
@@ -60,13 +48,6 @@ router.post("/new", async (req, res) => {
 //  2. Mengirimkan response dengan status 200 dan array yang berisi semua feedback yang ada.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
 
-router.get("/", async (req, res) => {
-    try {
-        const feedbacks = await Feedback.find();
-        return res.status(200).send(feedbacks);
-    } catch (error) {
-        return res.status(500).send(error);
-    }
-});
+router.get("/", getAllFeedbacks);
 
 module.exports = router;
