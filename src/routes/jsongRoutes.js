@@ -8,18 +8,15 @@
 //  axios: Klien HTTP berbasis Promise untuk melakukan request ke API
 //  dotenv: Modul untuk memuat variabel lingkungan dari file .env
 //  fs: Modul bawaan Node.js untuk bekerja dengan sistem file
-
 const express = require("express");
 const router = express.Router();
-const Jsong = require("../models/Jsong");
-const multer = require("multer");
-const { default: axios } = require("axios");
-const dotenv = require("dotenv").config().parsed;
-const fs = require("fs");
-
-const storage = multer.diskStorage({});
-
-const upload = multer({ storage });
+const {
+    createJsong,
+    getAllJsongs,
+    getJsongByTelp,
+    updateJsongStatus,
+    checkJsong,
+} = require("../controllers/jsongController");
 
 // Endpoint
 //  POST /new
@@ -49,34 +46,8 @@ const upload = multer({ storage });
 //  5. Membuat kontestan baru di database dengan objek newJsong.
 //  6. Mengirimkan response dengan status 201 dan objek newJsong.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
-router.post("/new", async (req, res) => {
-    const { nama_peserta, telp, nama_panggung, lagu, link } = req.body;
-    try {
-        // const imgurResponse = await axios.post(
-        //     `https://api.imgur.com/3/image?client_id=${process.env.IMGUR_CLIENT_ID}`,
-        //     {
-        //         image: bukti,
-        //     },
-        //     {
-        //         headers: {
-        //             Authorization: `Bearer ${process.env.IMGUR_TOKEN}`,
-        //         },
-        //     }
-        // );
-        const newJsong = {
-            nama_peserta: nama_peserta,
-            telp: telp,
-            nama_panggung: nama_panggung,
-            lagu: lagu,
-            link: link,
-            status: false,
-        };
-        await Jsong.create(newJsong);
-        return res.status(201).send(newJsong);
-    } catch (error) {
-        return res.status(500).send(error);
-    }
-});
+
+router.post("/new", createJsong);
 
 // Endpoint
 //  GET /
@@ -93,14 +64,8 @@ router.post("/new", async (req, res) => {
 //  1. Mencari semua kontestan di database.
 //  2. Mengirimkan response dengan status 200 dan array yang berisi semua kontestan.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
-router.get("/", async (req, res) => {
-    try {
-        const jsongs = await Jsong.find();
-        return res.status(200).send(jsongs);
-    } catch (error) {
-        return res.status(500).send(error);
-    }
-});
+
+router.get("/", getAllJsongs);
 
 // Endpoint
 //  GET /:telp
@@ -118,15 +83,8 @@ router.get("/", async (req, res) => {
 //  1. Mencari kontestan di database dengan nomor telepon yang diberikan.
 //  2. Mengirimkan response dengan status 200 dan objek kontestan.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
-router.get("/:telp", async (req, res) => {
-    const { telp } = req.params;
-    try {
-        const jsongs = await Jsong.findOne({ telp: telp });
-        return res.status(200).send(jsongs);
-    } catch (error) {
-        return res.status(500).send(error);
-    }
-});
+
+router.get("/:telp", getJsongByTelp);
 
 // Endpoint
 //  PUT /:telp
@@ -145,18 +103,9 @@ router.get("/:telp", async (req, res) => {
 //  2. Mengubah status partisipasi kontestan.
 //  3. Mengirimkan response dengan status 200 dan objek kontestan yang telah diubah.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
-router.put("/:telp", async (req, res) => {
-    const { telp } = req.params;
-    const get = await Jsong.findOne({ telp: telp });
-    const update = await Jsong.updateOne(
-        { telp: telp },
-        { status: !get.status }
-    );
-    res.send(update);
-});
 
-router.get('/cek', (req, res) => {
-  res.send('GET request to the jsong')
-})
+router.put("/:telp", updateJsongStatus);
+
+router.get('/cek', checkJsong);
 
 module.exports = router;

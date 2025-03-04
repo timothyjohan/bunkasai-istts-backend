@@ -5,11 +5,14 @@
 //  express: Framework web untuk Node.js
 //  ../models/User: Model Mongoose untuk koleksi User dalam database MongoDB
 //  jsonwebtoken: Untuk membuat dan memverifikasi token JWT
+
 const express = require("express");
-const User = require("../models/User");
-const jwt = require("jsonwebtoken");
 const router = express.Router();
-const JWT_KEY = "proyek2gatel";
+const { 
+    loginUser,
+    getAllUsers,
+    registerUser 
+} = require("../controllers/userController");
 
 // Endpoint
 //  POST /
@@ -35,39 +38,25 @@ const JWT_KEY = "proyek2gatel";
 //  4. Mengirimkan response dengan status 201 dan objek newUser.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
 
-router.post("/", async (req, res) => {
-    const { username, password } = req.body;
+router.post("/", loginUser);
 
-    if (username && password) {
-        const user = await User.findOne({ username });
-        if (user) {
-            if (user.password === password) {
-                const token = jwt.sign(
-                    {
-                        username: user.username,
-                        password: user.password,
-                    },
-                    JWT_KEY,
-                    { expiresIn: "1h" }
-                );
-                user.updateOne({ api_key: token });
+// Endpoint
+//  POST /register
+//    Menerima username dan password dalam req.body. Jika username
+//    dan password ada, maka mencoba mencari pengguna dengan username yang
+//    diberikan. Jika pengguna ditemukan, mengirim respons dengan status 400 dan pesan "Username sudah digunakan!".
+//    Jika pengguna tidak ditemukan, membuat pengguna baru di database dan mengirim respons dengan status 201 dan objek pengguna yang baru dibuat.
+//    Jika username atau password tidak ada, mengirim respons dengan status 400 dan pesan "Semua field wajib diisi!".
+// Request:
+//  Body:
+//    username: Username pengguna
+//    password: Password pengguna
+// Response:
+//  Status 201: Pengguna berhasil ditambahkan. Mengembalikan objek pengguna yang baru dibuat.
+//  Status 400: Username sudah digunakan atau field tidak lengkap.
+//  Status 500: Terjadi kesalahan server. Mengembalikan pesan error.
 
-                return res.status(200).json({
-                    body: {
-                        username,
-                        token,
-                    },
-                });
-            } else {
-                return res.status(400).send({ message: "Password salah!" });
-            }
-        } else {
-            return res.status(404).send({ message: "User Bukan Admin!" });
-        }
-    } else {
-        return res.status(400).send({ message: "Semua field wajib diisi!" });
-    }
-});
+router.post("/register", registerUser);
 
 // Endpoint
 //  GET /
@@ -84,24 +73,6 @@ router.post("/", async (req, res) => {
 //  2. Mengirimkan response dengan status 200 dan array yang berisi semua pengguna yang ada.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
 
-router.get("/", async (req, res) => {
-    const { user } = req.body;
-    let token = req.header("x-auth-token");
-    if (!req.header("x-auth-token")) {
-        return res.status(400).send("Authentication token is missing");
-    }
-    let userdata;
-    try {
-        userdata = jwt.verify(token, JWT_KEY);
-    } catch (err) {
-        return res.status(400).send("Invalid JWT Key");
-    }
-
-    let result = { userdata };
-
-    return res.status(201).send({
-        result,
-    });
-});
+router.get("/", getAllUsers);
 
 module.exports = router;

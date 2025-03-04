@@ -1,27 +1,18 @@
-// File gallery.js ini adalah bagian dari aplikasi Node.js yang
+// File galleryRoutes.js ini adalah bagian dari aplikasi Node.js yang
 // menggunakan Express.js sebagai framework dan MongoDB sebagai database.
 // File ini berfungsi untuk mengatur rute dan logika bisnis yang
 // berhubungan dengan galeri foto.
 
 // Dependencies :
 //  express: Framework web untuk Node.js
-//  multer: Middleware untuk menangani multipart/form-data, yang digunakan untuk upload file
-//  axios: Klien HTTP berbasis Promise untuk melakukan request ke API
-//  dotenv: Modul untuk memuat variabel lingkungan dari file .env
-//  fs: Modul bawaan Node.js untuk bekerja dengan sistem file
-//  ../models/Gallery: Model Mongoose untuk koleksi Gallery dalam database MongoDB
-
+//  ../controllers/galleryController: Modul controller untuk galeri
 const express = require("express");
 const router = express.Router();
-const multer = require("multer");
-const { default: axios } = require("axios");
-const dotenv = require("dotenv").config().parsed;
-const fs = require("fs");
-const Gallery = require("../models/Gallery");
-
-const storage = multer.diskStorage({});
-
-const upload = multer({ storage });
+const {
+    createGallery,
+    getAllGalleries,
+    deleteGallery,
+} = require("../controllers/galleryController");
 
 // Endpoint
 //  POST /new
@@ -45,52 +36,22 @@ const upload = multer({ storage });
 //  5. Membuat foto baru di database dengan objek newphoto.
 //  6. Mengirimkan response dengan status 201 dan objek newphoto.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
-router.post("/new", upload.single("photo"), async (req, res) => {
-    const photo = fs.readFileSync(req.file.path, { encoding: "base64" });
 
-    try {
-        const imgurResponse = await axios.post(
-            `https://api.imgur.com/3/image?client_id=${process.env.IMGUR_CLIENT_ID}`,
-            {
-                image: photo,
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${process.env.IMGUR_TOKEN}`,
-                },
-            }
-        );
-        let tempImg = imgurResponse.data.data.link;
-
-        const newphoto = {
-            img: tempImg,
-        };
-
-        await Gallery.create(newphoto);
-
-        return res.status(201).send(newphoto);
-    } catch (error) {
-        return res.status(500).send(error.message);
-    }
-});
+router.post("/new", createGallery);
 
 // Endpoint
 //  GET /
-//    Endpoint ini digunakan untuk mendapatkan semua foto yang ada di galeri.
-//    Foto-foto tersebut diambil dari database MongoDB dan dikirim kembali sebagai response.
+//    Mengembalikan semua gallery yang ada.
 // Response:
-//  Status 200: Mengembalikan array yang berisi semua foto yang ada.
+//  Status 200: Mengembalikan array yang berisi semua gallery yang ada.
 //  Status 500: Terjadi kesalahan server. Mengembalikan pesan error.
 
 // Cara kerja endpoint ini:
-//  1. Mengambil semua foto dari database.
-//  2. Mengirimkan response dengan status 200 dan array yang berisi semua foto.
+//  1. Mencari semua gallery yang ada di database.
+//  2. Mengirimkan response dengan status 200 dan array yang berisi semua gallery yang ada.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
 
-router.get("/", async (req, res) => {
-    const request = await Gallery.find();
-    return res.status(200).send(request);
-});
+router.get("/", getAllGalleries);
 
 // Endpoint
 //  DELETE /:id
@@ -112,25 +73,7 @@ router.get("/", async (req, res) => {
 //  5. Mengirimkan response dengan status 201 dan pesan sukses.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
 
-router.delete("/:id", async (req, res) => {
-    const { id } = req.params;
-    const url = `https://i.imgur.com/${id}.png`; //todo
-
-    try {
-        await Gallery.deleteOne({ img: url });
-        await axios.delete(
-            `https://api.imgur.com/3/image/${id}?client_id=${process.env.IMGUR_CLIENT_ID}`,
-            {
-                headers: {
-                    Authorization: `Bearer ${process.env.IMGUR_TOKEN}`,
-                },
-            }
-        );
-        return res.status(201).send(`Image berhasil dihapus`);
-    } catch (error) {
-        return res.status(500).send(error);
-    }
-});
+router.delete("/:id", deleteGallery);
 
 // Environtment Variables
 //  IMGUR_CLIENT_ID: Client ID Imgur API
