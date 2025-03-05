@@ -1,18 +1,13 @@
 const jwt = require("jsonwebtoken");
 
 const authenticateToken = (req, res, next) => {
-  if (req.method === "GET" && req.path === "/galery/") {
-    return next();
-  }
-
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
+  const token = req.header("x-auth-token");
 
   if (!token) {
     return res.status(401).json({ message: "Authentication token required" });
   }
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+  jwt.verify(token, process.env.JWT_KEY, (err, user) => {
     if (err) {
       return res.status(403).json({ message: "Invalid or expired token" });
     }

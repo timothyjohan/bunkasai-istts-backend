@@ -9,10 +9,11 @@
 const express = require("express");
 const router = express.Router();
 const {
-    createGallery,
-    getAllGalleries,
-    deleteGallery,
+  createGallery,
+  getAllGalleries,
+  deleteGallery,
 } = require("../controllers/galleryController");
+const authenticateToken = require("../middleware/auth");
 
 // Endpoint
 //  POST /new
@@ -37,7 +38,7 @@ const {
 //  6. Mengirimkan response dengan status 201 dan objek newphoto.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
 
-router.post("/new", createGallery);
+router.post("/new", authenticateToken, createGallery);
 
 // Endpoint
 //  GET /
@@ -73,7 +74,7 @@ router.get("/", getAllGalleries);
 //  5. Mengirimkan response dengan status 201 dan pesan sukses.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
 
-router.delete("/:id", deleteGallery);
+router.delete("/:id", authenticateToken, deleteGallery);
 
 // Environtment Variables
 //  IMGUR_CLIENT_ID: Client ID Imgur API
