@@ -7,10 +7,11 @@
 const express = require("express");
 const router = express.Router();
 const {
-    createTenant,
-    getAllTenants,
-    updateTenantStatus,
+  createTenant,
+  getAllTenants,
+  updateTenantStatus,
 } = require("../controllers/tenantsController");
+const authenticateToken = require("../middleware/auth");
 
 // Endpoint
 //  POST /new
@@ -33,7 +34,7 @@ const {
 //  4. Mengirimkan response dengan status 201 dan objek newTenant.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
 
-router.post("/new", createTenant);
+router.post("/new", authenticateToken, createTenant);
 
 // Endpoint
 //  GET /
@@ -47,7 +48,7 @@ router.post("/new", createTenant);
 //  2. Mengirimkan response dengan status 200 dan array yang berisi semua tenant yang ada.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
 
-router.get("/", getAllTenants);
+router.get("/", authenticateToken, getAllTenants);
 
 // Endpoint
 //  PUT /:tel
@@ -67,6 +68,6 @@ router.get("/", getAllTenants);
 //  4. Mengirimkan response dengan status 200 dan objek tenant.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
 
-router.put("/:tel", updateTenantStatus);
+router.put("/:tel", authenticateToken, updateTenantStatus);
 
 module.exports = router;

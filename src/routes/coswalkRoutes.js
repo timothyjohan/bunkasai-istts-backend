@@ -20,11 +20,12 @@ const storage = multer.diskStorage({});
 const upload = multer({ storage });
 
 const {
-    createCoswalk,
-    getAllCoswalks,
-    getCoswalkByInstagram,
-    updateCoswalkStatus,
+  createCoswalk,
+  getAllCoswalks,
+  getCoswalkByInstagram,
+  updateCoswalkStatus,
 } = require("../controllers/coswalkController");
+const authenticateToken = require("../middleware/auth");
 
 // Endpoint
 //  POST /new
@@ -51,7 +52,7 @@ const {
 //  6. Mengirimkan response dengan status 201 dan objek newCoswalk.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
 
-router.post("/new", createCoswalk);
+router.post("/new", authenticateToken, createCoswalk);
 
 // Endpoint
 //  GET /
@@ -69,7 +70,7 @@ router.post("/new", createCoswalk);
 //  2. Mengirimkan response dengan status 200 dan array yang berisi semua peserta.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
 
-router.get("/", getAllCoswalks);
+router.get("/", authenticateToken, getAllCoswalks);
 
 // Endpoint
 //  GET /:instagram
@@ -88,7 +89,7 @@ router.get("/", getAllCoswalks);
 //  2. Mengirimkan response dengan status 200 dan objek peserta.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
 
-router.get("/:instagram", getCoswalkByInstagram);
+router.get("/:instagram", authenticateToken, getCoswalkByInstagram);
 
 // Endpoint
 //  DELETE /:instagram
@@ -108,6 +109,6 @@ router.get("/:instagram", getCoswalkByInstagram);
 //  3. Mengirimkan response dengan status 200 dan objek peserta.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
 
-router.put("/:instagram", updateCoswalkStatus);
+router.put("/:instagram", authenticateToken, updateCoswalkStatus);
 
 module.exports = router;
