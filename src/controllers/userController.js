@@ -1,6 +1,5 @@
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
-const JWT_KEY = "proyek2gatel";
 
 const loginUser = async (req, res) => {
   const { username, password } = req.body;
@@ -14,7 +13,7 @@ const loginUser = async (req, res) => {
             username: user.username,
             password: user.password,
           },
-          JWT_KEY,
+          process.env.JWT_KEY,
           { expiresIn: "1h" }
         );
         user.updateOne({ api_key: token });
@@ -53,7 +52,7 @@ const registerUser = async (req, res) => {
         username: newUser.username,
         password: newUser.password,
       },
-      JWT_KEY,
+      process.env.JWT_KEY,
       { expiresIn: "1h" }
     );
     newUser.updateOne({ api_key: token });
