@@ -8,11 +8,12 @@
 
 const express = require("express");
 const router = express.Router();
-const { 
-    loginUser,
-    getAllUsers,
-    registerUser 
+const {
+  loginUser,
+  getAllUsers,
+  registerUser,
 } = require("../controllers/userController");
+const authenticateToken = require("../middleware/auth");
 
 // Endpoint
 //  POST /
@@ -73,6 +74,6 @@ router.post("/register", registerUser);
 //  2. Mengirimkan response dengan status 200 dan array yang berisi semua pengguna yang ada.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
 
-router.get("/", getAllUsers);
+router.get("/", authenticateToken, getAllUsers);
 
 module.exports = router;

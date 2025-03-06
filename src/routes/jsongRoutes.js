@@ -11,12 +11,13 @@
 const express = require("express");
 const router = express.Router();
 const {
-    createJsong,
-    getAllJsongs,
-    getJsongByTelp,
-    updateJsongStatus,
-    checkJsong,
+  createJsong,
+  getAllJsongs,
+  getJsongByTelp,
+  updateJsongStatus,
+  checkJsong,
 } = require("../controllers/jsongController");
+const authenticateToken = require("../middleware/auth");
 
 // Endpoint
 //  POST /new
@@ -47,7 +48,7 @@ const {
 //  6. Mengirimkan response dengan status 201 dan objek newJsong.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
 
-router.post("/new", createJsong);
+router.post("/new", authenticateToken, createJsong);
 
 // Endpoint
 //  GET /
@@ -65,7 +66,7 @@ router.post("/new", createJsong);
 //  2. Mengirimkan response dengan status 200 dan array yang berisi semua kontestan.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
 
-router.get("/", getAllJsongs);
+router.get("/", authenticateToken, getAllJsongs);
 
 // Endpoint
 //  GET /:telp
@@ -84,7 +85,7 @@ router.get("/", getAllJsongs);
 //  2. Mengirimkan response dengan status 200 dan objek kontestan.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
 
-router.get("/:telp", getJsongByTelp);
+router.get("/:telp", authenticateToken, getJsongByTelp);
 
 // Endpoint
 //  PUT /:telp
@@ -104,8 +105,8 @@ router.get("/:telp", getJsongByTelp);
 //  3. Mengirimkan response dengan status 200 dan objek kontestan yang telah diubah.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
 
-router.put("/:telp", updateJsongStatus);
+router.put("/:telp", authenticateToken, updateJsongStatus);
 
-router.get('/cek', checkJsong);
+router.get("/cek", authenticateToken, checkJsong);
 
 module.exports = router;
