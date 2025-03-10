@@ -9,9 +9,10 @@
 const express = require("express");
 const router = express.Router();
 const {
-    createFeedback,
-    getAllFeedbacks,
+  createFeedback,
+  getAllFeedbacks,
 } = require("../controllers/feedbackController");
+const authenticateToken = require("../middleware/auth");
 
 // Endpoint
 //  POST /new
@@ -34,7 +35,7 @@ const {
 //  4. Mengirimkan response dengan status 201 dan objek newFeedback.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
 
-router.post("/new", createFeedback);
+router.post("/new", authenticateToken, createFeedback);
 
 // Endpoint
 //  GET /
@@ -48,6 +49,6 @@ router.post("/new", createFeedback);
 //  2. Mengirimkan response dengan status 200 dan array yang berisi semua feedback yang ada.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
 
-router.get("/", getAllFeedbacks);
+router.get("/", authenticateToken, getAllFeedbacks);
 
 module.exports = router;

@@ -1,6 +1,5 @@
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
-const JWT_KEY = "proyek2gatel";
 
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
@@ -29,7 +28,7 @@ const loginUser = async (req, res) => {
                         email: user.email,
                         password: user.password,
                     },
-                    JWT_KEY,
+                    process.env.JWT_KEY,
                     { expiresIn: "1h" }
                 );
                 user.updateOne({ api_key: token });
@@ -74,7 +73,7 @@ const registerUser = async (req, res) => {
                 email: newUser.email,
                 password: newUser.password,
             },
-            JWT_KEY,
+            process.env.JWT_KEY,
             { expiresIn: "1h" }
         );
         newUser.updateOne({ api_key: token });
@@ -91,27 +90,18 @@ const registerUser = async (req, res) => {
 };
 
 const getAllUsers = async (req, res) => {
-    const { user } = req.body;
-    let token = req.header("x-auth-token");
-    if (!req.header("x-auth-token")) {
-        return res.status(400).send("Authentication token is missing");
-    }
-    let userdata;
-    try {
-        userdata = jwt.verify(token, JWT_KEY);
-    } catch (err) {
-        return res.status(400).send("Invalid JWT Key");
-    }
+  const { user } = req.body;
+  const userdata = await User.find({});
 
-    let result = { userdata };
+  let result = { userdata };
 
-    return res.status(201).send({
-        result,
-    });
+  return res.status(201).send({
+    result,
+  });
 };
 
 module.exports = {
-    loginUser,
-    getAllUsers,
-    registerUser,
+  loginUser,
+  getAllUsers,
+  registerUser,
 };
