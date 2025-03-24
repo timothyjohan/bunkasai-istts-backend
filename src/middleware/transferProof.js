@@ -8,12 +8,12 @@ const TransferProof = require("../models/transferProof");
 // Konfigurasi multer
 const storage = multer.diskStorage({
   destination: async (req, file, callback) => {
-    const { username, type } = req.body;
+    const { email, type } = req.body;
     const uploadType = ["Ticket", "Jsong", "Coswalk"];
 
     //cek required field
-    if (!username) {
-      return callback(new Error("Username is required!"), null);
+    if (!email) {
+      return callback(new Error("Email is required!"), null);
     }
     if (!type) {
       return callback(new Error("Type is required!"), null);
@@ -22,14 +22,14 @@ const storage = multer.diskStorage({
       return callback(new Error("Invalid upload type!"), null);
     }
 
-    //cek username terdaftar di db
-    const checkUsername = await user.findOne({ username });
-    if (!checkUsername) {
-      return callback(new Error("Username not found!"), null);
+    //cek email terdaftar di db
+    const checkEmail = await user.findOne({ email });
+    if (!checkEmail) {
+      return callback(new Error("Email not found!"), null);
     }
 
-    // Cek apakah ada data dengan username dan type
-    const existingProofs = await TransferProof.find({ username, type });
+    // Cek apakah ada data dengan email dan type
+    const existingProofs = await TransferProof.find({ email, type });
 
     // Temukan entri pertama yang memiliki status selain "Invalid"
     const existingValidProof = existingProofs.find(

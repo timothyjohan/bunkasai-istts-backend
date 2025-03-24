@@ -3,11 +3,11 @@ const TransferProof = require("../models/transferProof");
 // Upload bukti transfer
 const uploadTransferProof = async (req, res) => {
   try {
-    const { username, type } = req.body;
+    const { email, type } = req.body;
 
     // insert ke db
     const newProof = new TransferProof({
-      username,
+      email,
       filePath: req.file.path,
       type,
       status: "Checking",
