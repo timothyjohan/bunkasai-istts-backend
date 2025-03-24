@@ -10,7 +10,7 @@ const uploadTransferProof = async (req, res) => {
       email,
       filePath: req.file.path,
       type,
-      status: "Checking",
+      status: "checking",
       uploadedAt: new Date(),
     });
     await newProof.save();

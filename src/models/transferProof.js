@@ -11,13 +11,13 @@ const transferProofSchema = new mongoose.Schema({
   },
   type: {
     type: String,
-    enum: ["Ticket", "Jsong", "Coswalk"],
+    enum: ["ticket", "jsong", "coswalk"],
     required: true,
   },
   status: {
     type: String,
-    enum: ["Checking", "Valid", "Invalid"],
-    default: "Checking",
+    enum: ["checking", "valid", "invalid"],
+    default: "checking",
   },
   uploadedAt: {
     type: Date,
