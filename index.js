@@ -13,6 +13,7 @@ const user = require("./src/routes/userRoutes");
 const gallery = require("./src/routes/galleryRoutes");
 const feedback = require("./src/routes/feedbackRoutes");
 const payment = require("./src/routes/paymentRoutes");
+const transferProof = require("./src/routes/transferProofRoutes");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv").config();
 
@@ -35,22 +36,23 @@ app.use("/api/user", user);
 app.use("/api/gallery", gallery);
 app.use("/api/feedback", feedback);
 app.use("/api/payment", payment);
+app.use("/api/transfer-proof", transferProof);
 
 // Rute Default: Rute default ("/") mengirimkan pesan sederhana.
 app.get("/", (req, res) => {
-    res.send("GET request to the homepage");
+  res.send("GET request to the homepage");
 });
 
 // Menjalankan Server: Server mulai mendengarkan port yang
 // ditentukan dalam file konfigurasi .env. Koneksi ke database MongoDB juga dibuat.
 app.listen(process.env.PORT, async () => {
-    try {
-        await mongoose.connect(
-            `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.klxoze2.mongodb.net/${process.env.DB_NAME}`
-        );
-        console.log("hehehhehee");
-    } catch (error) {
-        console.log(error);
-    }
-    console.log(`Server is running on port ${process.env.PORT}`);
+  try {
+    await mongoose.connect(
+      `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.klxoze2.mongodb.net/${process.env.DB_NAME}`
+    );
+    console.log("hehehhehee");
+  } catch (error) {
+    console.log(error);
+  }
+  console.log(`Server is running on port ${process.env.PORT}`);
 });
