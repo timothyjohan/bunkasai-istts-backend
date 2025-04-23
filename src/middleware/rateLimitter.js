@@ -1,7 +1,7 @@
 const rateLimit = require("express-rate-limit");
 
 // Limit registration: max 3 requests per IP per minute
-const registerLimiter = rateLimit({
+const threeTryLimitter = rateLimit({
   windowMs: 300 * 1000, // 5 minute
   max: 3,
   message: { message: "Terlalu banyak percobaan, coba lagi nanti." },
@@ -19,6 +19,6 @@ const loginLimiter = rateLimit({
 });
 
 module.exports = {
-  registerLimiter,
+  threeTryLimitter,
   loginLimiter,
 };

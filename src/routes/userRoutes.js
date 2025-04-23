@@ -14,7 +14,7 @@ const {
   registerUser,
 } = require("../controllers/userController");
 const authenticateToken = require("../middleware/auth");
-const { loginLimiter, registerLimiter } = require("../middleware/rateLimitter");
+const { loginLimiter, threeTryLimitter } = require("../middleware/rateLimitter");
 
 // Endpoint
 //  POST /
@@ -58,7 +58,7 @@ router.post("/", loginLimiter ,loginUser);
 //  Status 400: Username sudah digunakan atau field tidak lengkap.
 //  Status 500: Terjadi kesalahan server. Mengembalikan pesan error.
 
-router.post("/register", registerLimiter, registerUser);
+router.post("/register", threeTryLimitter, registerUser);
 
 // Endpoint
 //  GET /
