@@ -56,7 +56,7 @@ const loginUser = async (req, res) => {
 };
 
 const registerUser = async (req, res) => {
-  const { email, password } = req.body;
+    const { email, password, name, phone_number } = req.body;
 
   // Regex untuk memvalidasi format email
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -70,18 +70,16 @@ const registerUser = async (req, res) => {
       return res.status(400).send({ message: "Email sudah digunakan!" });
     }
 
-    const newUser = new User({ email, password });
-    await newUser.save();
+    if (email && password && name && phone_number) {
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).send({ message: "Email sudah digunakan!" });
+        }
 
-    const token = jwt.sign(
-      {
-        email: newUser.email,
-        password: newUser.password,
-      },
-      process.env.JWT_KEY,
-      { expiresIn: "1h" }
-    );
-    newUser.updateOne({ api_key: token });
+        const newUser = new User({ email, password, name, phone_number });
+        console.log(newUser);
+        
+        await newUser.save();
 
     return res.status(201).json({
       body: {
@@ -92,7 +90,7 @@ const registerUser = async (req, res) => {
   } else {
     return res.status(400).send({ message: "Semua field wajib diisi!" });
   }
-};
+}};
 
 const getAllUsers = async (req, res) => {
   const { user } = req.body;
