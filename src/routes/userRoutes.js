@@ -14,6 +14,7 @@ const {
   registerUser,
 } = require("../controllers/userController");
 const authenticateToken = require("../middleware/auth");
+const { loginLimiter, registerLimiter } = require("../middleware/rateLimitter");
 
 // Endpoint
 //  POST /
@@ -39,7 +40,7 @@ const authenticateToken = require("../middleware/auth");
 //  4. Mengirimkan response dengan status 201 dan objek newUser.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
 
-router.post("/", loginUser);
+router.post("/", loginLimiter ,loginUser);
 
 // Endpoint
 //  POST /register
@@ -57,7 +58,7 @@ router.post("/", loginUser);
 //  Status 400: Username sudah digunakan atau field tidak lengkap.
 //  Status 500: Terjadi kesalahan server. Mengembalikan pesan error.
 
-router.post("/register", registerUser);
+router.post("/register", registerLimiter, registerUser);
 
 // Endpoint
 //  GET /
