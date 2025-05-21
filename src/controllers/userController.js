@@ -84,7 +84,6 @@ const registerUser = async (req, res) => {
     return res.status(201).json({
       body: {
         email: newUser.email,
-        token,
       },
     });
   } else {
