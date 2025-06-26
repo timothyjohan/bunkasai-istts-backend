@@ -17,7 +17,7 @@ const {
   updateJsongStatus,
   checkJsong,
 } = require("../controllers/jsongController");
-const authenticateToken = require("../middleware/auth");
+const { authenticateToken, authorizeAdmin } = require("../middleware/auth");
 
 // Endpoint
 //  POST /new
@@ -66,7 +66,7 @@ router.post("/new", authenticateToken, createJsong);
 //  2. Mengirimkan response dengan status 200 dan array yang berisi semua kontestan.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
 
-router.get("/", authenticateToken, getAllJsongs);
+router.get("/", authenticateToken, authorizeAdmin, getAllJsongs);
 
 // Endpoint
 //  GET /:telp

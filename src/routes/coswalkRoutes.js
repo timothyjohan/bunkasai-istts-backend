@@ -25,7 +25,7 @@ const {
   getCoswalkByInstagram,
   updateCoswalkStatus,
 } = require("../controllers/coswalkController");
-const authenticateToken = require("../middleware/auth");
+const { authenticateToken, authorizeAdmin } = require("../middleware/auth");
 
 // Endpoint
 //  POST /new
@@ -70,7 +70,7 @@ router.post("/new", authenticateToken, createCoswalk);
 //  2. Mengirimkan response dengan status 200 dan array yang berisi semua peserta.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
 
-router.get("/", authenticateToken, getAllCoswalks);
+router.get("/", authenticateToken, authorizeAdmin, getAllCoswalks);
 
 // Endpoint
 //  GET /:instagram

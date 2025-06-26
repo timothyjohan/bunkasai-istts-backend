@@ -7,7 +7,7 @@ const authenticateToken = (req, res, next) => {
     return res.status(401).json({ message: "Authentication token required" });
   }
 
-  jwt.verify(token, process.env.JWT_KEY , (err, user) => {
+  jwt.verify(token, process.env.JWT_KEY, (err, user) => {
     if (err) {
       return res.status(403).json({ message: "Invalid or expired token" });
     }
@@ -16,4 +16,12 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
-module.exports = authenticateToken;
+// Middleware to authorize admin users
+const authorizeAdmin = (req, res, next) => {
+  if (req.user && req.user.role === "admin") {
+    return next();
+  }
+  return res.status(403).json({ message: "Admin access required" });
+};
+
+module.exports = { authenticateToken, authorizeAdmin };

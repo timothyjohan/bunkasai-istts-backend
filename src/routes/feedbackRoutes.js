@@ -12,7 +12,7 @@ const {
   createFeedback,
   getAllFeedbacks,
 } = require("../controllers/feedbackController");
-const authenticateToken = require("../middleware/auth");
+const { authenticateToken, authorizeAdmin } = require("../middleware/auth");
 
 // Endpoint
 //  POST /new
@@ -49,6 +49,6 @@ router.post("/new", authenticateToken, createFeedback);
 //  2. Mengirimkan response dengan status 200 dan array yang berisi semua feedback yang ada.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
 
-router.get("/", authenticateToken, getAllFeedbacks);
+router.get("/", authenticateToken, authorizeAdmin, getAllFeedbacks);
 
 module.exports = router;

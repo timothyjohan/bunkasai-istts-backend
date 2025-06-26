@@ -9,6 +9,7 @@ const createCoswalk = async (req, res) => {
             nama_peserta: nama_peserta,
             nama_panggung: nama_panggung,
             instagram: instagram,
+            email: req.user.email, // Assuming req.user is populated by authenticateToken middleware
             status: false,
         };
 
