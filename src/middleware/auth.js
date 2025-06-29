@@ -4,7 +4,7 @@ const authenticateToken = (req, res, next) => {
   const token = req.header("x-auth-token");
 
   if (!token) {
-    return res.status(401).json({ message: "Authentication token required" });
+    return res.status(401).json({ message: "Authentication token required, please try to login again" });
   }
 
   jwt.verify(token, process.env.JWT_KEY, (err, user) => {

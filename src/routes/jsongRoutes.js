@@ -15,7 +15,7 @@ const {
   getAllJsongs,
   getJsongByTelp,
   updateJsongStatus,
-  checkJsong,
+  getJsongByEmail,
 } = require("../controllers/jsongController");
 const { authenticateToken, authorizeAdmin } = require("../middleware/auth");
 
@@ -107,6 +107,6 @@ router.get("/:telp", authenticateToken, getJsongByTelp);
 
 router.put("/:telp", authenticateToken, updateJsongStatus);
 
-router.get("/cek", authenticateToken, checkJsong);
+router.get("/email/:email", authenticateToken, getJsongByEmail)
 
 module.exports = router;

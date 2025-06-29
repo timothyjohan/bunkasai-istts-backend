@@ -50,9 +50,21 @@ const updateCoswalkStatus = async (req, res) => {
     res.send(update);
 };
 
+const getCoswalkByEmail = async (req, res) => {
+    const { email } = req.params;
+    try {
+        console.log(email);
+        const coswalks = await Coswalk.find({ email: email });
+        return res.status(200).send(coswalks);
+    } catch (error) {
+        return res.status(500).send(error);
+    }
+};
+
 module.exports = {
     createCoswalk,
     getAllCoswalks,
     getCoswalkByInstagram,
-    updateCoswalkStatus
+    updateCoswalkStatus,
+    getCoswalkByEmail
 };
