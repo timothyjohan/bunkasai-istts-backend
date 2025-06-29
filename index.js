@@ -15,7 +15,7 @@ const feedback = require("./src/routes/feedbackRoutes");
 const payment = require("./src/routes/paymentRoutes");
 const transferProof = require("./src/routes/transferProofRoutes");
 const mongoose = require("mongoose");
-const authenticateToken = require("./src/middleware/auth");
+const {authenticateToken} = require("./src/middleware/auth");
 const dotenv = require("dotenv").config();
 
 // Inisialisasi Aplikasi Express: Aplikasi Express dibuat dan port ditetapkan.
@@ -38,7 +38,7 @@ app.use("/api/gallery", gallery);
 app.use("/api/feedback", feedback);
 app.use("/api/payment", payment);
 app.use("/api/transfer-proof", transferProof);
-app.use('/uploads', authenticateToken, express.static(process.cwd() + '/uploads'))
+app.use('/uploads', express.static(process.cwd() + '/uploads'))
 
 // Rute Default: Rute default ("/") mengirimkan pesan sederhana.
 app.get("/", (req, res) => {

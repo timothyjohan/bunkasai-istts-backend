@@ -12,8 +12,9 @@ const {
   loginUser,
   getAllUsers,
   registerUser,
+  adminLogin,
 } = require("../controllers/userController");
-const authenticateToken = require("../middleware/auth");
+const {authenticateToken, authorizeAdmin} = require("../middleware/auth");
 const { loginLimiter, threeTryLimitter } = require("../middleware/rateLimitter");
 
 // Endpoint
@@ -75,6 +76,22 @@ router.post("/register", threeTryLimitter, registerUser);
 //  2. Mengirimkan response dengan status 200 dan array yang berisi semua pengguna yang ada.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
 
-router.get("/", authenticateToken, getAllUsers);
+router.get("/", authenticateToken, authorizeAdmin, getAllUsers);
+
+// Endpoint
+//  POST /admin/login
+//    Menerima username dan password dalam req.body khusus untuk login admin.
+//    Jika user ditemukan dan role-nya admin, maka login berhasil dan token dikirimkan.
+//    Jika bukan admin, maka login gagal.
+// Request:
+//  Body:
+//    username: Username admin
+//    password: Password admin
+// Response:
+//  Status 200: Login berhasil, mengembalikan token dan data admin.
+//  Status 401: Bukan admin atau login gagal.
+//  Status 500: Terjadi kesalahan server.
+
+router.post("/admin/login", loginLimiter, adminLogin);
 
 module.exports = router;

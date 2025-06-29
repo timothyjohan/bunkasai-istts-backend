@@ -11,7 +11,7 @@ const {
   getAllTenants,
   updateTenantStatus,
 } = require("../controllers/tenantsController");
-const authenticateToken = require("../middleware/auth");
+const { authenticateToken, authorizeAdmin } = require("../middleware/auth");
 
 // Endpoint
 //  POST /new
@@ -48,7 +48,7 @@ router.post("/new", authenticateToken, createTenant);
 //  2. Mengirimkan response dengan status 200 dan array yang berisi semua tenant yang ada.
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
 
-router.get("/", authenticateToken, getAllTenants);
+router.get("/", authenticateToken, authorizeAdmin, getAllTenants);
 
 // Endpoint
 //  PUT /:tel

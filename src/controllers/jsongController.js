@@ -20,6 +20,7 @@ const createJsong = async (req, res) => {
             nama_panggung: nama_panggung,
             lagu: lagu,
             link: link,
+            email: req.user.email, // Assuming req.user is set by authenticateToken middleware
             status: false,
         };
         await Jsong.create(newJsong);
