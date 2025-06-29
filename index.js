@@ -14,6 +14,7 @@ const gallery = require("./src/routes/galleryRoutes");
 const feedback = require("./src/routes/feedbackRoutes");
 const payment = require("./src/routes/paymentRoutes");
 const transferProof = require("./src/routes/transferProofRoutes");
+const ticket = require("./src/routes/ticketRoutes");
 const mongoose = require("mongoose");
 const {authenticateToken} = require("./src/middleware/auth");
 const dotenv = require("dotenv").config();
@@ -39,6 +40,7 @@ app.use("/api/feedback", feedback);
 app.use("/api/payment", payment);
 app.use("/api/transfer-proof", transferProof);
 app.use('/uploads', express.static(process.cwd() + '/uploads'))
+app.use("/api/ticket", ticket);
 
 // Rute Default: Rute default ("/") mengirimkan pesan sederhana.
 app.get("/", (req, res) => {
