@@ -24,6 +24,7 @@ const {
   getAllCoswalks,
   getCoswalkByInstagram,
   updateCoswalkStatus,
+  getCoswalkByEmail,
 } = require("../controllers/coswalkController");
 const { authenticateToken, authorizeAdmin } = require("../middleware/auth");
 
@@ -110,5 +111,8 @@ router.get("/:instagram", authenticateToken, getCoswalkByInstagram);
 // Jika terjadi error, endpoint ini akan mengirimkan response dengan status 500 dan pesan error.
 
 router.put("/:instagram", authenticateToken, updateCoswalkStatus);
+
+router.get("/email/:email", authenticateToken, getCoswalkByEmail);
+
 
 module.exports = router;

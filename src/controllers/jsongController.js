@@ -59,8 +59,14 @@ const updateJsongStatus = async (req, res) => {
     res.send(update);
 };
 
-const checkJsong = (req, res) => {
-    res.send('GET request to the jsong');
+const getJsongByEmail = async (req, res) => {
+    const { email } = req.params;
+    try {
+        const jsongs = await Jsong.find({ email: email });
+        return res.status(200).send(jsongs);
+    } catch (error) {
+        return res.status(500).send(error);
+    }
 };
 
 module.exports = {
@@ -68,5 +74,5 @@ module.exports = {
     getAllJsongs,
     getJsongByTelp,
     updateJsongStatus,
-    checkJsong,
+    getJsongByEmail,
 };
