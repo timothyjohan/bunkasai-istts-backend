@@ -11,7 +11,7 @@ const {
   getCosplayCompetitionByTelp,
   updateCosplayCompetitionStatus,
   getCosplayCompetitionByEmail,
-} = require("../controllers/cosplaycompetitionController");
+} = require("../controllers/cosplayCompetitionController");
 const { authenticateToken, authorizeAdmin } = require("../middleware/auth");
 
 // Endpoint: POST /new
