@@ -21,6 +21,10 @@ const CosplayCompetitionSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    email: {
+        type: String,
+        required: true,
+    },
     status: {
         type: Boolean,
         required: true,
