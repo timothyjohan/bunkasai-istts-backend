@@ -57,13 +57,74 @@ const createTicket = async (req, res) => {
 
 const getAllTickets = async (req, res) => {
     try {
-        const tickets = await Ticket.find(); // Fetch all tickets
-        return res.status(200).send(tickets);
+        // The aggregation pipeline to join tickets with transfer proofs
+        const ticketsWithProofs = await Ticket.aggregate([
+            {
+                // Stage 1: Perform a left outer join to the 'transferproofs' collection
+                $lookup: {
+                    from: "transferproofs", // The name of the collection for the TransferProof model
+                    let: { ticket_email: "$email" }, // Define a variable for the ticket's email
+                    // The pipeline to run on the 'transferproofs' collection for matching
+                    pipeline: [
+                        {
+                            // Match documents in 'transferproofs' based on two conditions
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        { $eq: ["$email", "$$ticket_email"] }, // Email must match
+                                        { $eq: ["$type", "ticket"] },       // Type must be 'ticket'
+                                    ],
+                                },
+                            },
+                        },
+                         {
+                            // Optional: Sort proofs by date to get the most recent one if there are multiple
+                            $sort: { uploadedAt: -1 }
+                        },
+                        {
+                            // Optional: Limit to only the single most recent proof
+                            $limit: 1
+                        }
+                    ],
+                    as: "transferProofData", // The array where the matched proof(s) will be stored
+                },
+            },
+            {
+                // Stage 2: Deconstruct the 'transferProofData' array.
+                // If a ticket has a proof, it will be converted from an array to an object.
+                // 'preserveNullAndEmptyArrays' ensures tickets without proofs are still included in the result.
+                $unwind: {
+                    path: "$transferProofData",
+                    preserveNullAndEmptyArrays: true,
+                },
+            },
+            {
+                // Stage 3: Reshape the final output document for the frontend
+                $project: {
+                    _id: 0, // Exclude the default MongoDB '_id'
+                    ulid: 1,
+                    name: 1,
+                    email: 1,
+                    status: "$status", // The status from the Ticket model
+                    // Create a new 'transferProof' object that matches the frontend's expectation
+                    transferProof: {
+                        filePath: "$transferProofData.filePath",
+                        status: "$transferProofData.status", // The status from the TransferProof model
+                    },
+                },
+            },
+        ]);
+
+        // Send the successfully aggregated data with a 200 OK status
+        return res.status(200).send(ticketsWithProofs);
+
     } catch (error) {
-        console.error("Error getting all tickets:", error);
+        // If any error occurs during the process, log it and send a 500 server error response
+        console.error("Error getting all tickets with proofs:", error);
         return res.status(500).send({ message: "Internal server error", error: error.message });
     }
 };
+
 
 
 const updateTicketStatus = async (req, res) => {
