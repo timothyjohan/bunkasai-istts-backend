@@ -9,7 +9,7 @@ const TransferProof = require("../models/transferProof");
 const storage = multer.diskStorage({
   destination: async (req, file, callback) => {
     const { email, type } = req.body;
-    const uploadType = ["ticket", "jsong", "coswalk"];
+    const uploadType = ["ticket", "jsong", "coswalk", "cosplay-competition", "yonkoma"];
 
     //cek required field
     if (!email) {

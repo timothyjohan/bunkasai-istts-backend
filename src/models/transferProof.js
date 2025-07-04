@@ -11,7 +11,7 @@ const transferProofSchema = new mongoose.Schema({
   },
   type: {
     type: String,
-    enum: ["ticket", "jsong", "coswalk"],
+    enum: ["ticket", "jsong", "coswalk", "cosplay-competition", "yonkoma"],
     required: true,
   },
   status: {
