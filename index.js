@@ -17,6 +17,7 @@ const transferProof = require("./src/routes/transferProofRoutes");
 const ticket = require("./src/routes/ticketRoutes");
 const cosplayCompetition = require("./src/routes/coscompRoutes");
 const yonkoma = require("./src/routes/yonkomaRoutes");
+const email = require("./src/routes/emailRoutes");
 const mongoose = require("mongoose");
 const {authenticateToken} = require("./src/middleware/auth");
 const dotenv = require("dotenv").config();
@@ -43,6 +44,7 @@ app.use("/api/gallery", gallery);
 app.use("/api/feedback", feedback);
 app.use("/api/payment", payment);
 app.use("/api/transfer-proof", transferProof);
+app.use("/api/email", email);
 app.use('/uploads', express.static(process.cwd() + '/uploads'))
 app.use("/api/ticket", ticket);
 
