@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const Ticket = require("../models/Ticket");
 
 const loginUser = async (req, res) => {
   try {
@@ -143,9 +144,34 @@ const adminLogin = async (req, res) => {
   }
 };
 
+const getUserDetailsWithTickets = async (req, res) => {
+  try {
+    const { email } = req.query;
+    if (!email) {
+      return res.status(400).send({ message: "Email wajib diisi!" });
+    }
+
+    const user = await User.findOne({ email }).select("-password");
+    if (!user) {
+      return res.status(404).send({ message: "User tidak ditemukan!" });
+    }
+
+    const tickets = await Ticket.find({ email });
+
+    return res.status(200).json({
+      user,
+      tickets,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send({ message: "Terjadi kesalahan server!" });
+  }
+};
+
 module.exports = {
   loginUser,
   getAllUsers,
   registerUser,
   adminLogin,
+  getUserDetailsWithTickets
 };

@@ -13,6 +13,7 @@ const {
   getAllUsers,
   registerUser,
   adminLogin,
+  getUserDetailsWithTickets,
 } = require("../controllers/userController");
 const {authenticateToken, authorizeAdmin} = require("../middleware/auth");
 const { loginLimiter, threeTryLimitter } = require("../middleware/rateLimitter");
@@ -93,5 +94,7 @@ router.get("/", authenticateToken, authorizeAdmin, getAllUsers);
 //  Status 500: Terjadi kesalahan server.
 
 router.post("/admin/login", loginLimiter, adminLogin);
+
+router.get("/details-ticket", authenticateToken, getUserDetailsWithTickets);
 
 module.exports = router;
