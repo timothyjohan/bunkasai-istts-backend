@@ -197,10 +197,44 @@ const getTicketByEmail = async (req, res) => {
     }
 };
 
+const createTicketAdmin = async (req, res) => {
+    const { email, name } = req.body;
+    if (!email) {
+        return res.status(400).send({ message: "Email is required." });
+    }
+
+    try {
+        // Generate a custom ULID in the format <today's date and time>_<4random_string>
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        const dateTimePart = `${year}${month}${day}_${hours}${minutes}${seconds}`;
+        const randomStringPart = Math.random().toString(36).substring(2, 6);
+        const customUlid = `${dateTimePart}_${randomStringPart}`;
+
+        const newTicket = {
+            ulid: customUlid,
+            name: name || "Admin Created Ticket", // Default name if not provided
+            email: email,
+            status: false,
+        };
+
+        await Ticket.create(newTicket);
+        return res.status(201).send({ message: "Ticket created by admin successfully", data: newTicket });
+    } catch (error) {
+        console.error("Error creating ticket by admin:", error);
+        return res.status(500).send({ message: "Internal server error", error: error.message });
+    }
+};
 module.exports = {
     createTicket,
     getAllTickets,
     getTicketByEmail,
     updateTicketStatus,
     checkTicket,
+    createTicketAdmin
 };
