@@ -2,6 +2,7 @@
 
 const Ticket = require("../models/Ticket");
 const qrcode = require('qrcode');
+const transferProof = require("../models/transferProof");
 
 // In a real application, you would require your actual Ticket model here.
 // For this example, we'll use a mock object similar to the Jsong reference.
@@ -131,20 +132,27 @@ const updateTicketStatus = async (req, res) => {
     const { email } = req.params; // Assuming update by email for simplicity
     const { status } = req.body; // Expecting the new status in the body
 
-    if (typeof status !== 'boolean') {
-        return res.status(400).send({ message: "Invalid status provided. Status must be a boolean." });
-    }
+    const statusToBool = status === 'valid'? true : status === 'invalid' ? false : null;
 
     try {
+        // Update ticket status
         const result = await Ticket.updateOne(
             { email: email },
-            { status: status }
+            { status: statusToBool }
         );
 
         if (result.modifiedCount === 0) {
             return res.status(404).send({ message: "Ticket not found or status already up to date." });
         }
-        return res.status(200).send({ message: "Ticket status updated successfully." });
+
+        // Also update transferproof status if exists
+        const newProofStatus = status ? "Valid" : "Invalid";
+        await transferProof.updateMany(
+            { email: email, type: "ticket" },
+            { status: status }
+        );
+
+        return res.status(200).send({ message: "Ticket and transfer proof status updated successfully to", newProofStatus, data: { email, status } });
     } catch (error) {
         console.error("Error updating ticket status:", error);
         return res.status(500).send({ message: "Internal server error", error: error.message });
