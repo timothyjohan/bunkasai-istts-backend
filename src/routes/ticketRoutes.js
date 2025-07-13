@@ -16,6 +16,6 @@ router.post("/admin/new", authenticateToken, authorizeAdmin, createTicketAdmin);
 router.get("/", authenticateToken, getAllTickets);
 router.put("/:email", authenticateToken, updateTicketStatus);
 router.get("/email/:email", authenticateToken, getTicketByEmail);
-router.get("/scan/:ulid", authenticateToken, scanTicket);
+router.put("/scan/:ulid", authenticateToken, scanTicket);
 
 module.exports = router;
