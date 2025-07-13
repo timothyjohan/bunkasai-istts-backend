@@ -6,6 +6,7 @@ const {
   updateTicketStatus,
   getTicketByEmail,
   createTicketAdmin,
+  scanTicket,
 } = require("../controllers/ticketController");
 
 const { authenticateToken, authorizeAdmin } = require("../middleware/auth");
@@ -15,5 +16,6 @@ router.post("/admin/new", authenticateToken, authorizeAdmin, createTicketAdmin);
 router.get("/", authenticateToken, getAllTickets);
 router.put("/:email", authenticateToken, updateTicketStatus);
 router.get("/email/:email", authenticateToken, getTicketByEmail);
+router.put("/scan/:ulid", authenticateToken, scanTicket);
 
 module.exports = router;
