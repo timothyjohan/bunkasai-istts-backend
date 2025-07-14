@@ -250,7 +250,7 @@ const createTicketAdmin = async (req, res) => {
       ulid: customUlid,
       name: name || "Admin Created Ticket", // Default name if not provided
       email: email,
-      status: false,
+      status: true,
     };
 
     await Ticket.create(newTicket);
